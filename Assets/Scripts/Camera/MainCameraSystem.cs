@@ -6,11 +6,11 @@ public partial class MainCameraSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        if (MainCameraGameObject.Instance != null &&
+        if (MainPlayerGameObject.Instance != null &&
             SystemAPI.TryGetSingletonEntity<MainCameraFollowComponent>(out Entity mainCameraFollowEntity))
         {
             LocalToWorld localToWorld = SystemAPI.GetComponent<LocalToWorld>(mainCameraFollowEntity);
-            MainCameraGameObject.Instance.follow.SetPositionAndRotation(localToWorld.Position,
+            MainPlayerGameObject.Instance.cameraFollow.SetPositionAndRotation(localToWorld.Position,
                 localToWorld.Rotation);
         }
     }

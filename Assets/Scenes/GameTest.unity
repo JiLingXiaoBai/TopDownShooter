@@ -463,6 +463,53 @@ MonoBehaviour:
       m_PostInfinity: 2
       m_RotationOrder: 4
   CustomBlends: {fileID: 0}
+--- !u!1 &1828449047
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1828449049}
+  - component: {fileID: 1828449050}
+  m_Layer: 0
+  m_Name: MainPlayerGameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1828449049
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828449047}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1828449050
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1828449047}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04e63a00c8cd44cf878833f9762c41c7, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  cinemachineBrain: {fileID: 1691732168}
+  cinemachinePositionComposer: {fileID: 1932588208}
+  cameraFollow: {fileID: 2134533644}
 --- !u!1 &1932588204
 GameObject:
   m_ObjectHideFlags: 0
@@ -474,7 +521,6 @@ GameObject:
   - component: {fileID: 1932588205}
   - component: {fileID: 1932588207}
   - component: {fileID: 1932588208}
-  - component: {fileID: 1932588209}
   m_Layer: 0
   m_Name: CinemachineCamera
   m_TagString: Untagged
@@ -571,20 +617,6 @@ MonoBehaviour:
     Time: 0
     Smoothing: 0
     IgnoreY: 0
---- !u!114 &1932588209
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1932588204}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04e63a00c8cd44cf878833f9762c41c7, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  positionComposer: {fileID: 1932588208}
-  follow: {fileID: 2134533644}
 --- !u!1 &2134533643
 GameObject:
   m_ObjectHideFlags: 0
@@ -622,6 +654,7 @@ SceneRoots:
   m_Roots:
   - {fileID: 1691732166}
   - {fileID: 1247702157}
+  - {fileID: 1828449049}
   - {fileID: 1932588205}
   - {fileID: 2134533644}
   - {fileID: 1658564983}
