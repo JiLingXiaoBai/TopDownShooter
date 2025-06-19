@@ -128,11 +128,11 @@ public readonly partial struct CharacterMovementAspect : IAspect,
         KinematicCharacterUtilities.AddVariableRateRotationFromFixedRateRotation(ref characterRotation,
             characterBody.RotationFromParent, baseContext.Time.DeltaTime, characterBody.LastPhysicsUpdateDeltaTime);
 
-        // Rotate towards move direction
-        if (math.lengthsq(characterControl.moveVector) > 0f)
+        // Rotate towards look direction
+        if (math.lengthsq(characterControl.lookVector) > 0f)
         {
             CharacterControlUtilities.SlerpRotationTowardsDirectionAroundUp(ref characterRotation,
-                baseContext.Time.DeltaTime, math.normalizesafe(characterControl.moveVector),
+                baseContext.Time.DeltaTime, math.normalizesafe(characterControl.lookVector),
                 MathUtilities.GetUpFromRotation(characterRotation), movementComponent.rotationSharpness);
         }
     }
