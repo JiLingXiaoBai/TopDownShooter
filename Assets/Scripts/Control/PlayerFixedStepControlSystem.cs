@@ -1,49 +1,31 @@
+using Unity.CharacterController;
 using Unity.Entities;
-using Unity.Physics;
-using UnityEngine;
+using Unity.Mathematics;
+using Unity.Transforms;
 
 /// <summary>
 /// Apply inputs that need to be read at a fixed rate.
 /// It is necessary to handle this as part of the fixed step group, in case your framerate is lower than the fixed step rate.
 /// </summary>
 [UpdateInGroup(typeof(FixedStepSimulationSystemGroup), OrderFirst = true)]
-public partial class PlayerFixedStepControlSystem : SystemBase
+public partial struct PlayerFixedStepControlSystem : ISystem
 {
-    protected override void OnCreate()
+    public void OnCreate(ref SystemState state)
     {
-        RequireForUpdate<FixedTickSingletonComponent>();
-        RequireForUpdate(SystemAPI.QueryBuilder().WithAll<PlayerInputComponent, CharacterControlComponent>()
+        state.RequireForUpdate<FixedTickSingletonComponent>();
+        state.RequireForUpdate(SystemAPI.QueryBuilder().WithAll<PlayerInputComponent, CharacterControlComponent>()
             .Build());
     }
 
-    protected override void OnUpdate()
+    public void OnUpdate(ref SystemState state)
     {
-        if (MainPlayerGameObject.Instance == null) return;
         uint tick = SystemAPI.GetSingleton<FixedTickSingletonComponent>().Tick;
-        PhysicsWorldSingleton physicsWorldSingleton = SystemAPI.GetSingleton<PhysicsWorldSingleton>();
-        CollisionWorld collisionWorld = physicsWorldSingleton.CollisionWorld;
-        foreach (var (input, control) in SystemAPI
-                     .Query<RefRO<PlayerInputComponent>, RefRW<CharacterControlComponent>>().WithAll<Simulate>())
+        foreach (var (input, control, trans) in SystemAPI
+                     .Query<RefRO<PlayerInputComponent>, RefRW<CharacterControlComponent>, RefRO<LocalTransform>>()
+                     .WithAll<Simulate>())
         {
-            var screenPoint = input.ValueRO.lookInput;
-            var camera = MainPlayerGameObject.Instance.cinemachineBrain.OutputCamera;
-            var cameraRay = camera.ScreenPointToRay(new Vector3(screenPoint.x, screenPoint.y, 0));
-            RaycastInput raycastInput = new RaycastInput
-            {
-                Start = cameraRay.GetPoint(0),
-                End = cameraRay.GetPoint(999f),
-                Filter = new CollisionFilter
-                {
-                    BelongsTo = ~0u,
-                    CollidesWith = 1u << GameAsset.DEFAULT_LAYER,
-                    GroupIndex = 0,
-                }
-            };
-            if (collisionWorld.CastRay(raycastInput, out var hit))
-            {
-                control.ValueRW.lookVector = hit.Position;
-            }
-            control.ValueRW.moveVector = input.ValueRO.moveInput;
+            var moveVector = new float3(input.ValueRO.moveInput.x, 0,  input.ValueRO.moveInput.y);
+            control.ValueRW.moveVector = MathUtilities.ClampToMaxLength(moveVector, 1f);
             control.ValueRW.jump = input.ValueRO.jumpPressed.IsSet(tick);
         }
     }

@@ -18,7 +18,7 @@ public class CharacterControlAuthoring : MonoBehaviour
 [Serializable]
 public struct CharacterControlComponent : IComponentData
 {
-    public float2 moveVector;
+    public float3 moveVector;
     public float3 lookVector;
     public bool jump;
 }
