@@ -25,7 +25,7 @@ public partial struct PlayerFixedStepControlSystem : ISystem
                      .WithAll<Simulate>())
         {
             var moveVector = new float3(input.ValueRO.moveInput.x, 0,  input.ValueRO.moveInput.y);
-            control.ValueRW.moveVector = MathUtilities.ClampToMaxLength(moveVector, 1f);
+            control.ValueRW.moveDirection = MathUtilities.ClampToMaxLength(moveVector, 1f);
             control.ValueRW.jump = input.ValueRO.jumpPressed.IsSet(tick);
         }
     }

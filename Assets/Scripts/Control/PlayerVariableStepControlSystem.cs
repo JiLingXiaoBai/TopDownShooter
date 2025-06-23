@@ -47,8 +47,7 @@ public partial class PlayerVariableStepControlSystem : SystemBase
             };
             if (collisionWorld.CastRay(raycastInput, out var hit))
             {
-                control.ValueRW.lookVector =
-                    hit.Position - (trans.ValueRO.Position + new float3(0, GameAsset.CHARACTER_HEIGHT_OFFSET, 0));
+                control.ValueRW.lookPosition = hit.Position;
             }
         }
     }

@@ -66,7 +66,8 @@ public readonly partial struct CharacterMovementAspect : IAspect,
         // Rotate move input and velocity to take into account parent rotation
         if (characterBody.ParentEntity != Entity.Null)
         {
-            characterControl.moveVector = math.rotate(characterBody.RotationFromParent, characterControl.moveVector);
+            characterControl.moveDirection =
+                math.rotate(characterBody.RotationFromParent, characterControl.moveDirection);
             characterBody.RelativeVelocity =
                 math.rotate(characterBody.RotationFromParent, characterBody.RelativeVelocity);
         }
@@ -74,7 +75,7 @@ public readonly partial struct CharacterMovementAspect : IAspect,
         if (characterBody.IsGrounded)
         {
             // Move on ground
-            float3 targetVelocity = characterControl.moveVector * movementComponent.groundMaxSpeed;
+            float3 targetVelocity = characterControl.moveDirection * movementComponent.groundMaxSpeed;
             CharacterControlUtilities.StandardGroundMove_Interpolated(ref characterBody.RelativeVelocity,
                 targetVelocity, movementComponent.groundedMovementSharpness, deltaTime, characterBody.GroundingUp,
                 characterBody.GroundHit.Normal);
@@ -89,7 +90,7 @@ public readonly partial struct CharacterMovementAspect : IAspect,
         else
         {
             // Move in air
-            float3 airAcceleration = characterControl.moveVector * movementComponent.airAcceleration;
+            float3 airAcceleration = characterControl.moveDirection * movementComponent.airAcceleration;
             if (math.lengthsq(airAcceleration) > 0f)
             {
                 float3 tmpVelocity = characterBody.RelativeVelocity;
@@ -129,10 +130,11 @@ public readonly partial struct CharacterMovementAspect : IAspect,
             characterBody.RotationFromParent, baseContext.Time.DeltaTime, characterBody.LastPhysicsUpdateDeltaTime);
 
         // Rotate towards look direction
-        if (math.lengthsq(characterControl.lookVector) > 0f)
+        if (math.lengthsq(characterControl.lookPosition) > 0f)
         {
+            float3 lookDirection = characterControl.lookPosition - CharacterAspect.LocalTransform.ValueRW.Position;
             CharacterControlUtilities.SlerpRotationTowardsDirectionAroundUp(ref characterRotation,
-                baseContext.Time.DeltaTime, math.normalizesafe(characterControl.lookVector),
+                baseContext.Time.DeltaTime, math.normalizesafe(lookDirection),
                 MathUtilities.GetUpFromRotation(characterRotation), movementComponent.rotationSharpness);
         }
     }
